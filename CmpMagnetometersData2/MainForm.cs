@@ -231,12 +231,12 @@ namespace CmpMagnetometersData2
                                     MagVal v = new MagVal();
                                     v.Data = int.Parse(s[0]);
                                     v.Msd = int.Parse(s[1]);
-                                    v.Status = (byte) int.Parse(s[2]);
+                                    v.Status = (byte) int.Parse(s[2], NumberStyles.AllowHexSpecifier);
                                     var time = DateTime.ParseExact(s[3], "MM-dd-yy HH:mm:ss.ff", new CultureInfo("en-US"));
 
                                     mg.ValList.Add(v);
 
-                                    if (v.Status != 80)
+                                    if (v.Status != 0x80)
                                     {
                                         txtTimeBug.AppendText($"{i} [{(int)v.Status}] {time}\r\n");
                                     }
@@ -305,6 +305,21 @@ namespace CmpMagnetometersData2
         {
             if (currentSelected == null) return;
             SaveFileDialog sf = new SaveFileDialog() { DefaultExt = "txt", };
+            if (sf.ShowDialog() == DialogResult.OK)
+            {
+                StringBuilder sb = new StringBuilder(currentSelected.ValList.Count*20);
+                sb.AppendFormat("{0:D3}\0{1:D5}\0", currentSelected.Id, currentSelected.StepTime);
+                DateTime t = currentSelected.StartTime;
+                foreach (var val in currentSelected.ValList)
+                {
+                    sb.AppendFormat("{0} +- {1:D5} [{2:X2}] {3:MM-dd-yy HH:mm:ss.ff}\0",val.Data,val.Msd,(uint)val.Status,t);
+                    t = t.AddSeconds(currentSelected.StepTime);
+                }
+                using ( StreamWriter sw = new StreamWriter(sf.FileName))
+                {
+                    sw.Write(sb.ToString());
+                }
+            }
             
         }
     }
