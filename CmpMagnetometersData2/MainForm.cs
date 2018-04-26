@@ -28,6 +28,14 @@ namespace CmpMagnetometersData2
             AxisX.ScrollBar.Enabled = false;
             AxisY.ScrollBar.Enabled = false;
 
+            AxisY.ScaleView.MinSize = 10;
+
+            AxisX.IsStartedFromZero = false;
+            AxisY.IsStartedFromZero = false;
+
+            AxisX.IntervalAutoMode = IntervalAutoMode.VariableCount;
+            AxisY.IntervalAutoMode = IntervalAutoMode.VariableCount;
+
             //  chart.Series[0].IsXValueIndexed = true;
             chart.MouseDown += OnChartMouseDown;
             chart.MouseUp += OnChartMouseUp;
@@ -37,11 +45,12 @@ namespace CmpMagnetometersData2
             
                AxisX.LabelStyle.Format = "H:mm:ss";
 
-             chart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
-             chart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
+            // chart.ChartAreas[0].CursorX.IsUserSelectionEnabled = true;
+             //chart.ChartAreas[0].CursorY.IsUserSelectionEnabled = true;
 
-            chart.ChartAreas[0].CursorX.IntervalType = DateTimeIntervalType.Milliseconds;
-            chart.ChartAreas[0].CursorX.Interval = 1;
+            //chart.ChartAreas[0].CursorX.IntervalType = DateTimeIntervalType.Milliseconds;
+            chart.ChartAreas[0].CursorX.Interval = 0;
+            chart.ChartAreas[0].CursorY.Interval = 0;
             // chart.ChartAreas[0].CursorX.SelectionColor = Color.Transparent;
             // chart.ChartAreas[0].CursorY.SelectionColor = Color.Transparent;
             //chart.ChartAreas[0].CursorX.LineDashStyle = ChartDashStyle.Dash;
@@ -55,6 +64,8 @@ namespace CmpMagnetometersData2
             cmbColorData.DisplayMember = "Name";
             cmbColorMSD.DataSource = new BindingSource(propInfos, null);
             cmbColorMSD.DisplayMember = "Name";
+
+            clbFiles.DisplayMember = "FileName";
         }
 
         #region ChartMouse
@@ -78,6 +89,28 @@ namespace CmpMagnetometersData2
             }
         }
 
+       
+
+        private void AxisXZoom(double a, double b)
+        {
+            AxisX.ScaleView.Zoom(a,b);
+            ChangeAxisX();
+        }
+        private void AxisYZoom(double a, double b)
+        {
+            AxisY.ScaleView.Zoom((int)a, (int)b);
+        }
+
+        private void AxisXScroll(double a)
+        {
+            AxisX.ScaleView.Scroll(a);
+            ChangeAxisX();
+        }                
+        private void AxisYScroll(double a)
+        {
+            AxisY.ScaleView.Scroll((int)a);
+        }
+
         private void OnChartMouseUp(object sender, MouseEventArgs e)
         {
             if (SelectButton == MouseButtons.None) return;
@@ -96,8 +129,8 @@ namespace CmpMagnetometersData2
             {
                 if (mousedx > 0 && mousedy > 0)
                 {
-                    AxisX.ScaleView.Zoom(x, x + dx);
-                    AxisY.ScaleView.Zoom(y, y + dy);
+                    AxisXZoom(x, x + dx);
+                    AxisYZoom(y, y + dy);
 
                 }
                 else if (mousedx < 0 && mousedy < 0)
@@ -108,19 +141,20 @@ namespace CmpMagnetometersData2
                     dy = szy * szy / -dy;
                     x = AxisX.ScaleView.Position + szx / 2 - dx / 2;
                     y = AxisY.ScaleView.Position + szy / 2 - dy / 2;
-                    AxisX.ScaleView.Zoom(x, x + dx);
-                    AxisY.ScaleView.Zoom(y, y + dy);
+                    AxisXZoom(x, x + dx);
+                    AxisYZoom(y, y + dy);
                 }
                 else
                 {
                     AxisX.ScaleView.ZoomReset();
                     AxisY.ScaleView.ZoomReset();
+                    ChangeAxisX();
                 }
             }
             if (SelectButton == MouseButtons.Right)
             {
-                AxisX.ScaleView.Scroll(AxisX.ScaleView.Position - dx);
-                AxisY.ScaleView.Scroll(AxisY.ScaleView.Position + dy);
+                AxisXScroll(AxisX.ScaleView.Position - dx);
+                AxisYScroll(AxisY.ScaleView.Position + dy);
             }
             SelectButton = MouseButtons.None;
         }
@@ -129,6 +163,13 @@ namespace CmpMagnetometersData2
         #endregion
 
 
+
+        private void ChangeAxisX()
+        {
+           dtpStartCorTime.Value =  DateTime.FromOADate(AxisX.ScaleView.ViewMinimum);
+          dtpEndCorTime.Value =   DateTime.FromOADate(AxisX.ScaleView.ViewMaximum);
+
+        }
 
         private void UpdateChart()
         {
@@ -154,15 +195,18 @@ namespace CmpMagnetometersData2
                     chart.Series.Add(s);
                 }
             }
+
+            chart.ResetAutoValues();
+            chart.Refresh();
         }
 
         private void UpdateFileList()
         {
-            clbFiles.DataSource = MultiDatas;
-            //clbFiles.DataSource = (MultiDatas.Count > 0) ? new BindingSource(MultiDatas, null) : null;
-            clbFiles.DisplayMember = "FileName";
-            //clbFiles.ValueMember = "FileName";
-            clbFiles.Refresh();
+         //  clbFiles.DataSource = MultiDatas;
+         //  //clbFiles.DataSource = (MultiDatas.Count > 0) ? new BindingSource(MultiDatas, null) : null;
+         //  clbFiles.DisplayMember = "FileName";
+         //  //clbFiles.ValueMember = "FileName";
+         //  clbFiles.Refresh();
         }
 
 
@@ -179,7 +223,7 @@ namespace CmpMagnetometersData2
         }
 
 
-        public List<MagData> MultiDatas = new List<MagData>();
+     //   public List<MagData> MultiDatas = new List<MagData>();
 
 
         private void btnAdd_Click(object sender, EventArgs e)
@@ -202,7 +246,7 @@ namespace CmpMagnetometersData2
                         mg.FileName = Path.GetFileNameWithoutExtension(file);
                         mg.ColorData = Color.Green;
                         mg.ColorMsd = Color.Green;
-                        mg.IsViewData = false;
+                        mg.IsViewData = true;
                         mg.IsViewMsd = false;
                         DateTime countTime = DateTime.Now;
                         txtTimeBug.AppendText($"file: {mg.FileName}\r\n");
@@ -266,11 +310,11 @@ namespace CmpMagnetometersData2
                             i++;
                         }
 
-                        MultiDatas.Add(mg);
+                        clbFiles.Items.Add(mg);
                     }
                 }
 
-                UpdateFileList();
+              //  UpdateFileList();
             }
         }
 
@@ -322,5 +366,71 @@ namespace CmpMagnetometersData2
             }
             
         }
+
+
+        delegate void MultiSum(int a, int b);
+
+        private double CorrelationExel(IEnumerable<int> fp, IEnumerable<int> sp)
+        {
+            double sumA = 0, sumB = 0, sumAB = 0, sumAA = 0, sumBB = 0;
+            var n = Math.Min(fp.Count(), sp.Count());
+            using (var se = sp.GetEnumerator())
+                foreach (var a in fp)
+                {
+                    if (!se.MoveNext()) break;
+                    var b = se.Current;
+                    sumA += a;
+                    sumB += b;
+                    sumAB += a * 1L * b;
+                    sumAA += a * 1L * a;
+                    sumBB += b * 1L * b;
+                }
+            var res = (n * sumAB - sumA * sumB) /
+                         Math.Sqrt((n * sumAA - sumA * sumA) * (n * sumBB - sumB * sumB));
+            return res;
+        }
+
+        private void btnCorrelation_Click(object sender, EventArgs e)
+        {
+            var corrList = new List<MagData>();
+
+            foreach (MagData item in clbFiles.CheckedItems)
+            {
+                if (item.IsViewData)
+                {
+                    corrList.Add(item);
+                }
+            }
+
+            var lt = dtpStartCorTime.Value.TimeOfDay;
+            var rt = dtpEndCorTime.Value.TimeOfDay;
+
+            for (int fi = 0; fi < corrList.Count-1; fi++)
+            {
+                var aval = corrList[fi].GetTimeInterval(lt, rt);
+                if (aval != null)
+                {
+                    for (int si = fi + 1; si < corrList.Count; si++)
+                    {
+                        var bval = corrList[si].GetTimeInterval(lt, rt);
+                        if (bval != null)
+                        {
+                            var res = CorrelationExel(aval, bval);
+                            txtTimeBug.AppendText(
+                                $"C: {corrList[fi]} и {corrList[si]} = {res}\r\n");
+                        }
+                    }
+                }
+            }
+        }
+        //txtValues.AppendText(
+            //    _chartForms[fi].GetFileName()
+            //    + " и "
+            //    + _chartForms[si].GetFileName()
+            //    + " = "
+            //    + res.ToString("F")
+            //    + "\r\n\r\n");
+
+        
     }
 }

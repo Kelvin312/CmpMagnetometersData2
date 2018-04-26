@@ -43,14 +43,17 @@
             this.cmbColorMSD = new System.Windows.Forms.ComboBox();
             this.btnUpdChart = new System.Windows.Forms.Button();
             this.btnSaveToFile = new System.Windows.Forms.Button();
+            this.btnCorrelation = new System.Windows.Forms.Button();
+            this.dtpStartCorTime = new System.Windows.Forms.DateTimePicker();
+            this.dtpEndCorTime = new System.Windows.Forms.DateTimePicker();
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAdd
             // 
-            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAdd.Location = new System.Drawing.Point(1023, 361);
+            this.btnAdd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnAdd.Location = new System.Drawing.Point(1221, 462);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(75, 23);
             this.btnAdd.TabIndex = 0;
@@ -60,8 +63,8 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemove.Location = new System.Drawing.Point(1104, 361);
+            this.btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnRemove.Location = new System.Drawing.Point(1302, 462);
             this.btnRemove.Name = "btnRemove";
             this.btnRemove.Size = new System.Drawing.Size(75, 23);
             this.btnRemove.TabIndex = 1;
@@ -70,18 +73,20 @@
             // 
             // clbFiles
             // 
-            this.clbFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.clbFiles.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.clbFiles.FormattingEnabled = true;
-            this.clbFiles.Location = new System.Drawing.Point(1023, 12);
+            this.clbFiles.Location = new System.Drawing.Point(1221, 12);
             this.clbFiles.Name = "clbFiles";
-            this.clbFiles.Size = new System.Drawing.Size(156, 334);
+            this.clbFiles.Size = new System.Drawing.Size(156, 424);
             this.clbFiles.TabIndex = 2;
             this.clbFiles.SelectedIndexChanged += new System.EventHandler(this.clbFiles_SelectedIndexChanged);
             // 
             // cbData
             // 
+            this.cbData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbData.AutoSize = true;
-            this.cbData.Location = new System.Drawing.Point(31, 337);
+            this.cbData.Location = new System.Drawing.Point(31, 438);
             this.cbData.Name = "cbData";
             this.cbData.Size = new System.Drawing.Size(61, 17);
             this.cbData.TabIndex = 3;
@@ -91,8 +96,9 @@
             // 
             // cbMSD
             // 
+            this.cbMSD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cbMSD.AutoSize = true;
-            this.cbMSD.Location = new System.Drawing.Point(31, 360);
+            this.cbMSD.Location = new System.Drawing.Point(31, 461);
             this.cbMSD.Name = "cbMSD";
             this.cbMSD.Size = new System.Drawing.Size(62, 17);
             this.cbMSD.TabIndex = 4;
@@ -102,16 +108,19 @@
             // 
             // dtpStartFile
             // 
+            this.dtpStartFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.dtpStartFile.CustomFormat = "yyyy.MM.dd - HH:mm:ss";
             this.dtpStartFile.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.dtpStartFile.Location = new System.Drawing.Point(269, 337);
+            this.dtpStartFile.Location = new System.Drawing.Point(269, 438);
             this.dtpStartFile.Name = "dtpStartFile";
+            this.dtpStartFile.ShowUpDown = true;
             this.dtpStartFile.Size = new System.Drawing.Size(162, 20);
             this.dtpStartFile.TabIndex = 5;
             // 
             // numStartFileMs
             // 
-            this.numStartFileMs.Location = new System.Drawing.Point(311, 361);
+            this.numStartFileMs.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numStartFileMs.Location = new System.Drawing.Point(311, 462);
             this.numStartFileMs.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -123,7 +132,8 @@
             // 
             // btnChangeStart
             // 
-            this.btnChangeStart.Location = new System.Drawing.Point(463, 361);
+            this.btnChangeStart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnChangeStart.Location = new System.Drawing.Point(463, 462);
             this.btnChangeStart.Name = "btnChangeStart";
             this.btnChangeStart.Size = new System.Drawing.Size(75, 23);
             this.btnChangeStart.TabIndex = 7;
@@ -133,27 +143,32 @@
             // 
             // txtTimeBug
             // 
-            this.txtTimeBug.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTimeBug.Location = new System.Drawing.Point(713, 10);
+            this.txtTimeBug.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTimeBug.Location = new System.Drawing.Point(945, 10);
             this.txtTimeBug.Name = "txtTimeBug";
-            this.txtTimeBug.Size = new System.Drawing.Size(304, 336);
+            this.txtTimeBug.Size = new System.Drawing.Size(270, 279);
             this.txtTimeBug.TabIndex = 8;
             this.txtTimeBug.Text = "";
             // 
             // chart
             // 
+            this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             chartArea1.Name = "ChartArea1";
             this.chart.ChartAreas.Add(chartArea1);
             this.chart.Location = new System.Drawing.Point(12, 10);
             this.chart.Name = "chart";
-            this.chart.Size = new System.Drawing.Size(695, 312);
+            this.chart.Size = new System.Drawing.Size(927, 413);
             this.chart.TabIndex = 9;
             this.chart.Text = "chart";
             // 
             // cmbColorData
             // 
+            this.cmbColorData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmbColorData.FormattingEnabled = true;
-            this.cmbColorData.Location = new System.Drawing.Point(98, 337);
+            this.cmbColorData.Location = new System.Drawing.Point(98, 438);
             this.cmbColorData.Name = "cmbColorData";
             this.cmbColorData.Size = new System.Drawing.Size(121, 21);
             this.cmbColorData.TabIndex = 10;
@@ -161,8 +176,9 @@
             // 
             // cmbColorMSD
             // 
+            this.cmbColorMSD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.cmbColorMSD.FormattingEnabled = true;
-            this.cmbColorMSD.Location = new System.Drawing.Point(98, 364);
+            this.cmbColorMSD.Location = new System.Drawing.Point(98, 465);
             this.cmbColorMSD.Name = "cmbColorMSD";
             this.cmbColorMSD.Size = new System.Drawing.Size(121, 21);
             this.cmbColorMSD.TabIndex = 11;
@@ -170,7 +186,8 @@
             // 
             // btnUpdChart
             // 
-            this.btnUpdChart.Location = new System.Drawing.Point(610, 361);
+            this.btnUpdChart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnUpdChart.Location = new System.Drawing.Point(610, 462);
             this.btnUpdChart.Name = "btnUpdChart";
             this.btnUpdChart.Size = new System.Drawing.Size(75, 23);
             this.btnUpdChart.TabIndex = 12;
@@ -180,7 +197,8 @@
             // 
             // btnSaveToFile
             // 
-            this.btnSaveToFile.Location = new System.Drawing.Point(841, 361);
+            this.btnSaveToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSaveToFile.Location = new System.Drawing.Point(1039, 462);
             this.btnSaveToFile.Name = "btnSaveToFile";
             this.btnSaveToFile.Size = new System.Drawing.Size(75, 23);
             this.btnSaveToFile.TabIndex = 13;
@@ -188,11 +206,45 @@
             this.btnSaveToFile.UseVisualStyleBackColor = true;
             this.btnSaveToFile.Click += new System.EventHandler(this.btnSaveToFile_Click);
             // 
+            // btnCorrelation
+            // 
+            this.btnCorrelation.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCorrelation.Location = new System.Drawing.Point(1140, 306);
+            this.btnCorrelation.Name = "btnCorrelation";
+            this.btnCorrelation.Size = new System.Drawing.Size(75, 23);
+            this.btnCorrelation.TabIndex = 14;
+            this.btnCorrelation.Text = "btnCorrelation";
+            this.btnCorrelation.UseVisualStyleBackColor = true;
+            this.btnCorrelation.Click += new System.EventHandler(this.btnCorrelation_Click);
+            // 
+            // dtpStartCorTime
+            // 
+            this.dtpStartCorTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpStartCorTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpStartCorTime.Location = new System.Drawing.Point(956, 295);
+            this.dtpStartCorTime.Name = "dtpStartCorTime";
+            this.dtpStartCorTime.ShowUpDown = true;
+            this.dtpStartCorTime.Size = new System.Drawing.Size(84, 20);
+            this.dtpStartCorTime.TabIndex = 15;
+            // 
+            // dtpEndCorTime
+            // 
+            this.dtpEndCorTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.dtpEndCorTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
+            this.dtpEndCorTime.Location = new System.Drawing.Point(956, 321);
+            this.dtpEndCorTime.Name = "dtpEndCorTime";
+            this.dtpEndCorTime.ShowUpDown = true;
+            this.dtpEndCorTime.Size = new System.Drawing.Size(84, 20);
+            this.dtpEndCorTime.TabIndex = 16;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1191, 396);
+            this.ClientSize = new System.Drawing.Size(1389, 497);
+            this.Controls.Add(this.dtpEndCorTime);
+            this.Controls.Add(this.dtpStartCorTime);
+            this.Controls.Add(this.btnCorrelation);
             this.Controls.Add(this.btnSaveToFile);
             this.Controls.Add(this.btnUpdChart);
             this.Controls.Add(this.cmbColorMSD);
@@ -232,6 +284,9 @@
         private System.Windows.Forms.ComboBox cmbColorMSD;
         private System.Windows.Forms.Button btnUpdChart;
         private System.Windows.Forms.Button btnSaveToFile;
+        private System.Windows.Forms.Button btnCorrelation;
+        private System.Windows.Forms.DateTimePicker dtpStartCorTime;
+        private System.Windows.Forms.DateTimePicker dtpEndCorTime;
     }
 }
 

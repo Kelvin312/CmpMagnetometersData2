@@ -29,5 +29,21 @@ namespace CmpMagnetometersData2
             // Generates the text shown in the combo box
             return FileName;
         }
+
+        public IEnumerable<int> GetTimeInterval(TimeSpan l, TimeSpan r)
+        {
+            var start = StartTime.TimeOfDay;
+            if ( start  <= l && start <= r && l<r)
+            {
+                var li = (int)Math.Round((l - start).TotalSeconds / StepTime);
+                if (li < ValList.Count)
+                {
+                    var ri = (int) Math.Round((r - start).TotalSeconds / StepTime);
+                    if (ri >= ValList.Count) ri = ValList.Count-1;
+                    return ValList.Skip(li).Take(ri - li + 1).Select(x => x.Data);
+                }
+            }
+            return null;
+        }
     }
 }
