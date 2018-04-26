@@ -282,7 +282,15 @@ namespace CmpMagnetometersData2
 
                                     if (v.Status != 0x80)
                                     {
-                                        txtTimeBug.AppendText($"{i} [{(int)v.Status}] {time}\r\n");
+                                        string description = "";
+                                        if ((v.Status & 0x40) != 0) description += " низкое напряжение питания (измерение не проводилось)";
+                                        if ((v.Status & 0x20) != 0) description += " нет сигнала (измерение не проводилось)";
+                                        if ((v.Status & 0x10) != 0) description += " результат не попадает в пределы 20000-100000 нTл";
+                                        if ((v.Status & 0x04) != 0) description += " низкое отношение сигнал/шум";
+                                        if ((v.Status & 0x02) != 0) description += " укорочение длительности сигнала";
+                                        if ((v.Status & 0x01) != 0) description += " значение поля не соответствует установленному рабочему поддиапазону";
+
+                                        txtTimeBug.AppendText($"{i} {time} [{(int)v.Status:X2}]{description}\r\n");
                                     }
 
                                     if (i > 0)
