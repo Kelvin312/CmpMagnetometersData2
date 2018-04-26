@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.clbFiles = new System.Windows.Forms.CheckedListBox();
@@ -48,6 +48,7 @@
             this.dtpEndCorTime = new System.Windows.Forms.DateTimePicker();
             this.btnClear = new System.Windows.Forms.Button();
             this.numSub = new System.Windows.Forms.NumericUpDown();
+            this.btnDelta = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSub)).BeginInit();
@@ -73,6 +74,7 @@
             this.btnRemove.TabIndex = 1;
             this.btnRemove.Text = "btnRemove";
             this.btnRemove.UseVisualStyleBackColor = true;
+            this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
             // clbFiles
             // 
@@ -159,8 +161,8 @@
             this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea3);
+            chartArea2.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea2);
             this.chart.Location = new System.Drawing.Point(12, 10);
             this.chart.Name = "chart";
             this.chart.Size = new System.Drawing.Size(927, 413);
@@ -269,11 +271,22 @@
             0,
             0});
             // 
+            // btnDelta
+            // 
+            this.btnDelta.Location = new System.Drawing.Point(965, 371);
+            this.btnDelta.Name = "btnDelta";
+            this.btnDelta.Size = new System.Drawing.Size(75, 23);
+            this.btnDelta.TabIndex = 19;
+            this.btnDelta.Text = "btnDelta";
+            this.btnDelta.UseVisualStyleBackColor = true;
+            this.btnDelta.Click += new System.EventHandler(this.btnDelta_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1389, 497);
+            this.Controls.Add(this.btnDelta);
             this.Controls.Add(this.numSub);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.dtpEndCorTime);
@@ -324,6 +337,7 @@
         private System.Windows.Forms.DateTimePicker dtpEndCorTime;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.NumericUpDown numSub;
+        private System.Windows.Forms.Button btnDelta;
     }
 }
 

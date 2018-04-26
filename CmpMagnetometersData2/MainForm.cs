@@ -193,7 +193,7 @@ namespace CmpMagnetometersData2
                     // LabelFormat = "H:mm:ss",
                 };
 
-                var sub = (int) numSub.Value;
+                var sub = item.Id == -1 ? 0 : (int) numSub.Value;
 
                 foreach (var val in item.ValList)
                 {
@@ -254,10 +254,8 @@ namespace CmpMagnetometersData2
                         int i = -2;
                         MagData mg = new MagData();
                         mg.FileName = Path.GetFileNameWithoutExtension(file);
-                        mg.ColorData = Color.Green;
-                        mg.ColorMsd = Color.Green;
                         mg.IsViewData = true;
-                        mg.IsViewMsd = false;
+                        mg.IsViewMsd = true;
                         DateTime countTime = DateTime.Now;
                         txtTimeBug.AppendText($"file: {mg.FileName}\r\n");
 
@@ -270,6 +268,11 @@ namespace CmpMagnetometersData2
                                 {
                                     case -2:
                                         mg.Id = int.Parse(val);
+
+                                        bool is107 = mg.Id == 107;
+                                        mg.ColorData = is107 ? Color.HotPink : Color.Green;
+                                        mg.ColorMsd = is107 ? Color.LightPink : Color.LightGreen;
+
                                         break;
                                     case -1:
                                         mg.StepTime = int.Parse(val);
@@ -328,7 +331,7 @@ namespace CmpMagnetometersData2
                             i++;
                         }
 
-                        clbFiles.Items.Add(mg);
+                        clbFiles.Items.Add(mg, true);
                     }
                 }
 
@@ -386,7 +389,7 @@ namespace CmpMagnetometersData2
         }
 
 
-        delegate void MultiSum(int a, int b);
+        
 
         private double CorrelationExel(IEnumerable<int> fp, IEnumerable<int> sp)
         {
@@ -449,14 +452,51 @@ namespace CmpMagnetometersData2
         {
             txtTimeBug.Text = "";
         }
-        //txtValues.AppendText(
-        //    _chartForms[fi].GetFileName()
-        //    + " и "
-        //    + _chartForms[si].GetFileName()
-        //    + " = "
-        //    + res.ToString("F")
-        //    + "\r\n\r\n");
 
+        private void btnDelta_Click(object sender, EventArgs e)
+        {
+            var deltaList = new List<MagData>();
+            int namei = 0;
+            foreach (MagData a in clbFiles.CheckedItems)
+            {
+                if (a.Id != 107) continue;
+                foreach (MagData b in clbFiles.CheckedItems)
+                {
+                    if (b.Id != 970) continue;
+                    if (a.StartTime == b.StartTime && a.StepTime == b.StepTime)
+                    {
+                        deltaList.Add(new MagData()
+                        {
+                            FileName = $"Delta{namei}",
+                            IsViewData = true,
+                            IsViewMsd = false,
+                            ColorData = Color.Blue,
+                            ColorMsd = Color.AliceBlue,
+                            Id = -1,
+                            StartTime = a.StartTime,
+                            StepTime = a.StepTime,
+                            ValList = a.ValList.Zip(b.ValList, (l, r) => new MagVal()
+                                {
+                                    Data = l.Data - r.Data,
+                                    Msd = l.Msd - r.Msd,
+                                    Status = (byte) (l.Status | r.Status),
+                                })
+                                .ToList(),
+                        });
+                        namei++;
+                    }
+                }
+            }
+            foreach (var delta in deltaList)
+            {
+                clbFiles.Items.Add(delta, true);
+            }
+        }
 
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            currentSelected = null;
+            clbFiles.Items.Remove(clbFiles.SelectedItem);
+        }
     }
 }
