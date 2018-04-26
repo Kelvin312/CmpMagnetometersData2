@@ -174,26 +174,36 @@ namespace CmpMagnetometersData2
         private void UpdateChart()
         {
             chart.Series.Clear();
-            
+
             foreach (MagData item in clbFiles.CheckedItems)
             {
-                if (item.IsViewData)
+                var time = new DateTime(2018, 1, 1).Add(item.StartTime.TimeOfDay);
+                var sd = new Series()
                 {
-                    DateTime time = item.StartTime;
-                    Series s = new Series() {
-                        ChartType = SeriesChartType.Line,
-                        Color = item.ColorData,
-                        XValueType = ChartValueType.DateTime,
-                       // LabelFormat = "H:mm:ss",
-                    };
-                    foreach (var val in item.ValList)
-                    {
-                        s.Points.AddXY(time.ToOADate(), val.Data);
-                        time = time.AddSeconds(item.StepTime);
-                    }
-                    
-                    chart.Series.Add(s);
+                    ChartType = SeriesChartType.Line,
+                    Color = item.ColorData,
+                    XValueType = ChartValueType.DateTime,
+                    // LabelFormat = "H:mm:ss",
+                };
+                var sm = new Series()
+                {
+                    ChartType = SeriesChartType.Line,
+                    Color = item.ColorMsd,
+                    XValueType = ChartValueType.DateTime,
+                    // LabelFormat = "H:mm:ss",
+                };
+
+                var sub = (int) numSub.Value;
+
+                foreach (var val in item.ValList)
+                {
+                    if (item.IsViewData) sd.Points.AddXY(time.ToOADate(), val.Data - sub);
+                    if (item.IsViewMsd) sm.Points.AddXY(time.ToOADate(), val.Msd);
+                    time = time.AddSeconds(item.StepTime);
                 }
+
+                if (item.IsViewData) chart.Series.Add(sd);
+                if (item.IsViewMsd) chart.Series.Add(sm);
             }
 
             chart.ResetAutoValues();
@@ -426,19 +436,27 @@ namespace CmpMagnetometersData2
                             var res = CorrelationExel(aval, bval);
                             txtTimeBug.AppendText(
                                 $"C: {corrList[fi]} и {corrList[si]} = {res}\r\n");
+
+                            txtTimeBug.SelectionStart = txtTimeBug.Text.Length;
+                            txtTimeBug.ScrollToCaret();
                         }
                     }
                 }
             }
         }
-        //txtValues.AppendText(
-            //    _chartForms[fi].GetFileName()
-            //    + " и "
-            //    + _chartForms[si].GetFileName()
-            //    + " = "
-            //    + res.ToString("F")
-            //    + "\r\n\r\n");
 
-        
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            txtTimeBug.Text = "";
+        }
+        //txtValues.AppendText(
+        //    _chartForms[fi].GetFileName()
+        //    + " и "
+        //    + _chartForms[si].GetFileName()
+        //    + " = "
+        //    + res.ToString("F")
+        //    + "\r\n\r\n");
+
+
     }
 }

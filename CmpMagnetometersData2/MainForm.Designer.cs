@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.clbFiles = new System.Windows.Forms.CheckedListBox();
@@ -46,8 +46,11 @@
             this.btnCorrelation = new System.Windows.Forms.Button();
             this.dtpStartCorTime = new System.Windows.Forms.DateTimePicker();
             this.dtpEndCorTime = new System.Windows.Forms.DateTimePicker();
+            this.btnClear = new System.Windows.Forms.Button();
+            this.numSub = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSub)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -156,8 +159,8 @@
             this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea1.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea3);
             this.chart.Location = new System.Drawing.Point(12, 10);
             this.chart.Name = "chart";
             this.chart.Size = new System.Drawing.Size(927, 413);
@@ -187,7 +190,7 @@
             // btnUpdChart
             // 
             this.btnUpdChart.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnUpdChart.Location = new System.Drawing.Point(610, 462);
+            this.btnUpdChart.Location = new System.Drawing.Point(803, 465);
             this.btnUpdChart.Name = "btnUpdChart";
             this.btnUpdChart.Size = new System.Drawing.Size(75, 23);
             this.btnUpdChart.TabIndex = 12;
@@ -198,7 +201,7 @@
             // btnSaveToFile
             // 
             this.btnSaveToFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSaveToFile.Location = new System.Drawing.Point(1039, 462);
+            this.btnSaveToFile.Location = new System.Drawing.Point(1033, 463);
             this.btnSaveToFile.Name = "btnSaveToFile";
             this.btnSaveToFile.Size = new System.Drawing.Size(75, 23);
             this.btnSaveToFile.TabIndex = 13;
@@ -237,11 +240,42 @@
             this.dtpEndCorTime.Size = new System.Drawing.Size(84, 20);
             this.dtpEndCorTime.TabIndex = 16;
             // 
+            // btnClear
+            // 
+            this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClear.Location = new System.Drawing.Point(1140, 371);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(75, 23);
+            this.btnClear.TabIndex = 17;
+            this.btnClear.Text = "btnClear";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
+            // 
+            // numSub
+            // 
+            this.numSub.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.numSub.Location = new System.Drawing.Point(708, 466);
+            this.numSub.Maximum = new decimal(new int[] {
+            100000000,
+            0,
+            0,
+            0});
+            this.numSub.Name = "numSub";
+            this.numSub.Size = new System.Drawing.Size(89, 20);
+            this.numSub.TabIndex = 18;
+            this.numSub.Value = new decimal(new int[] {
+            54530000,
+            0,
+            0,
+            0});
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1389, 497);
+            this.Controls.Add(this.numSub);
+            this.Controls.Add(this.btnClear);
             this.Controls.Add(this.dtpEndCorTime);
             this.Controls.Add(this.dtpStartCorTime);
             this.Controls.Add(this.btnCorrelation);
@@ -263,6 +297,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numSub)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -287,6 +322,8 @@
         private System.Windows.Forms.Button btnCorrelation;
         private System.Windows.Forms.DateTimePicker dtpStartCorTime;
         private System.Windows.Forms.DateTimePicker dtpEndCorTime;
+        private System.Windows.Forms.Button btnClear;
+        private System.Windows.Forms.NumericUpDown numSub;
     }
 }
 
