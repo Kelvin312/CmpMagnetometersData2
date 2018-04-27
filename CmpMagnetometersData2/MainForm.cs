@@ -425,20 +425,21 @@ namespace CmpMagnetometersData2
 
             var lt = dtpStartCorTime.Value.TimeOfDay;
             var rt = dtpEndCorTime.Value.TimeOfDay;
+            TimeSpan st;
 
             for (int fi = 0; fi < corrList.Count-1; fi++)
             {
-                var aval = corrList[fi].GetTimeInterval(lt, rt);
+                var aval = corrList[fi].GetTimeInterval(lt, rt, out st);
                 if (aval != null)
                 {
                     for (int si = fi + 1; si < corrList.Count; si++)
                     {
-                        var bval = corrList[si].GetTimeInterval(lt, rt);
+                        var bval = corrList[si].GetTimeInterval(lt, rt, out st);
                         if (bval != null)
                         {
                             var res = CorrelationExel(aval, bval);
                             txtTimeBug.AppendText(
-                                $"C: {corrList[fi]} и {corrList[si]} = {res}\r\n");
+                                $"C: {st} {corrList[fi]} и {corrList[si]} = {res}\r\n");
 
                             txtTimeBug.SelectionStart = txtTimeBug.Text.Length;
                             txtTimeBug.ScrollToCaret();
@@ -497,6 +498,57 @@ namespace CmpMagnetometersData2
         {
             currentSelected = null;
             clbFiles.Items.Remove(clbFiles.SelectedItem);
+        }
+
+        private void btnSaveExel_Click(object sender, EventArgs e)
+        {
+
+            var lt = dtpStartCorTime.Value.TimeOfDay;
+            var rt = dtpEndCorTime.Value.TimeOfDay;
+            TimeSpan st, curSt = lt;
+
+            var data = new List<StringBuilder>();
+            var sb = new StringBuilder();
+            sb.AppendFormat("Time");
+
+
+            foreach (MagData item in clbFiles.CheckedItems)
+            {
+                if (item.IsViewData)
+                {
+                    var aval = item.GetTimeInterval(lt, rt, out st);
+                    if (aval != null)
+                    {
+                        curSt = st;
+                        sb.AppendFormat($"\t{item.FileName}");
+                        var i = 0;
+                        foreach (var a in aval)
+                        {
+                            if(i>=data.Count) data.Add(new StringBuilder());
+                            data[i].AppendFormat($"\t{a}");
+                            i++;
+                        }
+                    }
+                }
+            }
+
+            sb.AppendLine();
+            foreach (var str in data)
+            {
+                sb.AppendFormat("{0}",curSt);
+                curSt = curSt.Add(new TimeSpan( 0, 0, 3));
+                sb.Append(str);
+                sb.AppendLine();
+            }
+
+            SaveFileDialog sf = new SaveFileDialog() { DefaultExt = "txt", };
+            if (sf.ShowDialog() == DialogResult.OK)
+            {
+                using (StreamWriter sw = new StreamWriter(sf.FileName))
+                {
+                    sw.Write(sb.ToString());
+                }
+            }
         }
     }
 }

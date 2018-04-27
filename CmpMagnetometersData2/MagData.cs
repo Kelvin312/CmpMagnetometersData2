@@ -30,14 +30,16 @@ namespace CmpMagnetometersData2
             return FileName;
         }
 
-        public IEnumerable<int> GetTimeInterval(TimeSpan l, TimeSpan r)
+        public IEnumerable<int> GetTimeInterval(TimeSpan l, TimeSpan r, out TimeSpan st)
         {
             var start = StartTime.TimeOfDay;
+            st = start;
             if ( start  <= l && start <= r && l<r)
             {
                 var li = (int)Math.Round((l - start).TotalSeconds / StepTime);
                 if (li < ValList.Count)
                 {
+                    st = st.Add(new TimeSpan(0, 0, li * StepTime));
                     var ri = (int) Math.Round((r - start).TotalSeconds / StepTime);
                     if (ri >= ValList.Count) ri = ValList.Count-1;
                     return ValList.Skip(li).Take(ri - li + 1).Select(x => x.Data);
