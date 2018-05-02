@@ -175,7 +175,7 @@ namespace CmpMagnetometersData2
         {
             chart.Series.Clear();
 
-            foreach (MagData item in clbFiles.CheckedItems)
+            foreach (SequenceMeas item in clbFiles.CheckedItems)
             {
                 var time = new DateTime(2018, 1, 1).Add(item.StartTime.TimeOfDay);
                 var sd = new Series()
@@ -195,10 +195,10 @@ namespace CmpMagnetometersData2
 
                 var sub = item.Id == -1 ? 0 : (int) numSub.Value;
 
-                foreach (var val in item.ValList)
+                foreach (var val in item.ItemList)
                 {
-                    if (item.IsViewData) sd.Points.AddXY(time.ToOADate(), val.Data - sub);
-                    if (item.IsViewMsd) sm.Points.AddXY(time.ToOADate(), val.Msd);
+                    if (item.IsViewData) sd.Points.AddXY(time.ToOADate(), val.Field - sub);
+                    if (item.IsViewMsd) sm.Points.AddXY(time.ToOADate(), val.Qmc);
                     time = time.AddSeconds(item.StepTime);
                 }
 
@@ -220,9 +220,9 @@ namespace CmpMagnetometersData2
         }
 
 
-        private MagData currentSelected = null;
+        private SequenceMeas currentSelected = null;
 
-        private void NewSelected(MagData item)
+        private void NewSelected(SequenceMeas item)
         {
             currentSelected = item;
             cmbColorData.SelectedItem = item.ColorData;
@@ -252,7 +252,7 @@ namespace CmpMagnetometersData2
                     using (StreamReader sr = new StreamReader(file))
                     {
                         int i = -2;
-                        MagData mg = new MagData();
+                        SequenceMeas mg = new SequenceMeas();
                         mg.FileName = Path.GetFileNameWithoutExtension(file);
                         mg.IsViewData = true;
                         mg.IsViewMsd = true;
@@ -285,25 +285,25 @@ namespace CmpMagnetometersData2
                                 try
                                 {
                                     var s = val.Split(new[] {" +- ", " [", "] "}, StringSplitOptions.RemoveEmptyEntries);
-                                    MagVal v = new MagVal();
-                                    v.Data = int.Parse(s[0]);
-                                    v.Msd = int.Parse(s[1]);
-                                    v.Status = (byte) int.Parse(s[2], NumberStyles.AllowHexSpecifier);
+                                    ItemMeas v = new ItemMeas();
+                                    v.Field = int.Parse(s[0]);
+                                    v.Qmc = int.Parse(s[1]);
+                                    v.State = (byte) int.Parse(s[2], NumberStyles.AllowHexSpecifier);
                                     var time = DateTime.ParseExact(s[3], "MM-dd-yy HH:mm:ss.ff", new CultureInfo("en-US"));
 
-                                    mg.ValList.Add(v);
+                                    mg.ItemList.Add(v);
 
-                                    if (v.Status != 0x80)
+                                    if (v.State != 0x80)
                                     {
                                         string description = "";
-                                        if ((v.Status & 0x40) != 0) description += " низкое напряжение питания (измерение не проводилось)";
-                                        if ((v.Status & 0x20) != 0) description += " нет сигнала (измерение не проводилось)";
-                                        if ((v.Status & 0x10) != 0) description += " результат не попадает в пределы 20000-100000 нTл";
-                                        if ((v.Status & 0x04) != 0) description += " низкое отношение сигнал/шум";
-                                        if ((v.Status & 0x02) != 0) description += " укорочение длительности сигнала";
-                                        if ((v.Status & 0x01) != 0) description += " значение поля не соответствует установленному рабочему поддиапазону";
+                                        if ((v.State & 0x40) != 0) description += " низкое напряжение питания (измерение не проводилось)";
+                                        if ((v.State & 0x20) != 0) description += " нет сигнала (измерение не проводилось)";
+                                        if ((v.State & 0x10) != 0) description += " результат не попадает в пределы 20000-100000 нTл";
+                                        if ((v.State & 0x04) != 0) description += " низкое отношение сигнал/шум";
+                                        if ((v.State & 0x02) != 0) description += " укорочение длительности сигнала";
+                                        if ((v.State & 0x01) != 0) description += " значение поля не соответствует установленному рабочему поддиапазону";
 
-                                        txtTimeBug.AppendText($"{i} {time} [{(int)v.Status:X2}]{description}\r\n");
+                                        txtTimeBug.AppendText($"{i} {time} [{(int)v.State:X2}]{description}\r\n");
                                     }
 
                                     if (i > 0)
@@ -341,7 +341,7 @@ namespace CmpMagnetometersData2
 
         private void clbFiles_SelectedIndexChanged(object sender, EventArgs e)
         {
-            NewSelected((MagData)clbFiles.SelectedItem);
+            NewSelected((SequenceMeas)clbFiles.SelectedItem);
         }
 
         private void ItemValueChange(object sender, EventArgs e)
@@ -372,12 +372,12 @@ namespace CmpMagnetometersData2
             SaveFileDialog sf = new SaveFileDialog() { DefaultExt = "txt", };
             if (sf.ShowDialog() == DialogResult.OK)
             {
-                StringBuilder sb = new StringBuilder(currentSelected.ValList.Count*20);
+                StringBuilder sb = new StringBuilder(currentSelected.ItemList.Count*20);
                 sb.AppendFormat("{0:D3}\0{1:D5}\0", currentSelected.Id, currentSelected.StepTime);
                 DateTime t = currentSelected.StartTime;
-                foreach (var val in currentSelected.ValList)
+                foreach (var val in currentSelected.ItemList)
                 {
-                    sb.AppendFormat("{0} +- {1:D5} [{2:X2}] {3:MM-dd-yy HH:mm:ss.ff}\0",val.Data,val.Msd,(uint)val.Status,t);
+                    sb.AppendFormat("{0} +- {1:D5} [{2:X2}] {3:MM-dd-yy HH:mm:ss.ff}\0",val.Field,val.Qmc,(uint)val.State,t);
                     t = t.AddSeconds(currentSelected.StepTime);
                 }
                 using ( StreamWriter sw = new StreamWriter(sf.FileName))
@@ -413,9 +413,9 @@ namespace CmpMagnetometersData2
 
         private void btnCorrelation_Click(object sender, EventArgs e)
         {
-            var corrList = new List<MagData>();
+            var corrList = new List<SequenceMeas>();
 
-            foreach (MagData item in clbFiles.CheckedItems)
+            foreach (SequenceMeas item in clbFiles.CheckedItems)
             {
                 if (item.IsViewData)
                 {
@@ -456,17 +456,17 @@ namespace CmpMagnetometersData2
 
         private void btnDelta_Click(object sender, EventArgs e)
         {
-            var deltaList = new List<MagData>();
+            var deltaList = new List<SequenceMeas>();
             int namei = 0;
-            foreach (MagData a in clbFiles.CheckedItems)
+            foreach (SequenceMeas a in clbFiles.CheckedItems)
             {
                 if (a.Id != 107) continue;
-                foreach (MagData b in clbFiles.CheckedItems)
+                foreach (SequenceMeas b in clbFiles.CheckedItems)
                 {
                     if (b.Id != 970) continue;
                     if (a.StartTime == b.StartTime && a.StepTime == b.StepTime)
                     {
-                        deltaList.Add(new MagData()
+                        deltaList.Add(new SequenceMeas()
                         {
                             FileName = $"Delta{namei}",
                             IsViewData = true,
@@ -476,11 +476,11 @@ namespace CmpMagnetometersData2
                             Id = -1,
                             StartTime = a.StartTime,
                             StepTime = a.StepTime,
-                            ValList = a.ValList.Zip(b.ValList, (l, r) => new MagVal()
+                            ItemList = a.ItemList.Zip(b.ItemList, (l, r) => new ItemMeas()
                                 {
-                                    Data = l.Data - r.Data,
-                                    Msd = l.Msd - r.Msd,
-                                    Status = (byte) (l.Status | r.Status),
+                                    Field = l.Field - r.Field,
+                                    Qmc = l.Qmc - r.Qmc,
+                                    State = (byte) (l.State | r.State),
                                 })
                                 .ToList(),
                         });
@@ -512,7 +512,7 @@ namespace CmpMagnetometersData2
             sb.AppendFormat("Time");
 
 
-            foreach (MagData item in clbFiles.CheckedItems)
+            foreach (SequenceMeas item in clbFiles.CheckedItems)
             {
                 if (item.IsViewData)
                 {
