@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Remoting.Messaging;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -392,7 +393,25 @@ namespace CmpMagnetometersData2
         }
 
 
-        
+        private double CorrelationExel(IEnumerable<double> fp, IEnumerable<double> sp)
+        {
+            double sumA = 0, sumB = 0, sumAB = 0, sumAA = 0, sumBB = 0;
+            var n = Math.Min(fp.Count(), sp.Count());
+            using (var se = sp.GetEnumerator())
+                foreach (var a in fp)
+                {
+                    if (!se.MoveNext()) break;
+                    var b = se.Current;
+                    sumA += a;
+                    sumB += b;
+                    sumAB += a * b;
+                    sumAA += a * a;
+                    sumBB += b * b;
+                }
+            var res = (n * sumAB - sumA * sumB) /
+                      Math.Sqrt((n * sumAA - sumA * sumA) * (n * sumBB - sumB * sumB));
+            return res;
+        }
 
         private double CorrelationExel(IEnumerable<int> fp, IEnumerable<int> sp)
         {
@@ -589,11 +608,10 @@ namespace CmpMagnetometersData2
                     }
                 }
 
+                var abCorVal = new List<IEnumerable<double>>();
 
                 foreach (var data in dataList)
                 {
-               
-               
                     var time = new DateTime(2018, 1, 1).Add(st);
                     var sd = new Series()
                     {
@@ -605,12 +623,25 @@ namespace CmpMagnetometersData2
                     };
 
                     var p = Approximation.DataLine(Approximation.Conv(data, minn, kpow),minn,kpow);
+                    abCorVal.Add(data.Zip(p,(fv,sv)=>fv-sv));
+
                     foreach (var val in p)
                     {
                         sd.Points.AddXY(time.ToOADate(), val-sub);
                         time = time.AddSeconds(3);
                     }
                     chart.Series.Add(sd);
+                }
+
+                if (abCorVal.Count > 1)
+                {
+
+                    var res = CorrelationExel(abCorVal[0], abCorVal[1]);
+                    txtTimeBug.AppendText(
+                        $"C: {kpow} | {st} = {res}\r\n");
+
+                    txtTimeBug.SelectionStart = txtTimeBug.Text.Length;
+                    txtTimeBug.ScrollToCaret();
                 }
             }
             chart.Refresh();
