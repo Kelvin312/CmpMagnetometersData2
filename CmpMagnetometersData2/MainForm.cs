@@ -205,10 +205,53 @@ namespace CmpMagnetometersData2
                 if (item.IsViewData) chart.Series.Add(sd);
                 if (item.IsViewMsd) chart.Series.Add(sm);
             }
-
+            
             chart.ResetAutoValues();
             chart.Refresh();
         }
+
+
+        private List<double[]> polynoms = new List<double[]>();
+        private TimeSpan startApprox;
+        private int nApprox;
+        private void ChartUpdateAprox(int kpow)
+        {
+            var deleteIndex= new List<Series>();
+            foreach (var ser in chart.Series)
+            {
+                if (ser.Tag != null && (int)ser.Tag == -1)
+                {
+                    deleteIndex.Add(ser);
+                }
+            }
+            foreach (var ser in deleteIndex)
+            {
+                chart.Series.Remove(ser);
+            }
+            if(kpow>=0)
+            foreach (var pol in polynoms)
+            {
+                var time = new DateTime(2018, 1, 1).Add(startApprox);
+                var sd = new Series()
+                {
+                    ChartType = SeriesChartType.Line,
+                    Color = Color.Black,
+                    XValueType = ChartValueType.DateTime,
+                    Tag = -1,
+                    // LabelFormat = "H:mm:ss",
+                };
+
+                var p = Approximation.DataLine(nApprox, kpow, pol);
+                foreach (var val in p)
+                {
+                    sd.Points.AddXY(time.ToOADate(), val);
+                    time = time.AddSeconds(3);
+                }
+                chart.Series.Add(sd);
+            }
+            chart.Refresh();
+        }
+
 
         private void UpdateFileList()
         {
@@ -549,6 +592,39 @@ namespace CmpMagnetometersData2
                     sw.Write(sb.ToString());
                 }
             }
+        }
+
+        private void btnCreateAprox_Click(object sender, EventArgs e)
+        {
+            var dataList = new List<IEnumerable<int>>();
+            var lt = dtpStartCorTime.Value.TimeOfDay;
+            var rt = dtpEndCorTime.Value.TimeOfDay;
+            TimeSpan tst, st = new TimeSpan();
+            int minn = int.MaxValue;
+            foreach (SequenceMeas item in clbFiles.CheckedItems)
+            {
+                if (item.IsViewData)
+                {
+                    var t = item.GetTimeInterval(lt, rt, out tst);
+                    if(t==null)continue;
+                    st = tst;
+                    dataList.Add(t);
+                    minn = Math.Min(t.Count(), minn);
+                }
+            }
+
+            nApprox = minn;
+            startApprox = st;
+            polynoms.Clear();
+            foreach (var data in dataList)
+            {
+                polynoms.Add( Approximation.Conv(data.Take(minn)));
+            }
+        }
+
+        private void btnUpdateAprox_Click(object sender, EventArgs e)
+        {
+            ChartUpdateAprox((int)numAproxPow.Value);
         }
     }
 }

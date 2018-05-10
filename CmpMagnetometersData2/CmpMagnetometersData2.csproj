@@ -47,6 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Approximation.cs" />
+    <Compile Include="AproxForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AproxForm.Designer.cs">
+      <DependentUpon>AproxForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="MagData.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -56,6 +63,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AproxForm.resx">
+      <DependentUpon>AproxForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             this.btnAdd = new System.Windows.Forms.Button();
             this.btnRemove = new System.Windows.Forms.Button();
             this.clbFiles = new System.Windows.Forms.CheckedListBox();
@@ -50,9 +50,13 @@
             this.numSub = new System.Windows.Forms.NumericUpDown();
             this.btnDelta = new System.Windows.Forms.Button();
             this.btnSaveExel = new System.Windows.Forms.Button();
+            this.btnUpdateAprox = new System.Windows.Forms.Button();
+            this.btnCreateAprox = new System.Windows.Forms.Button();
+            this.numAproxPow = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSub)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numAproxPow)).BeginInit();
             this.SuspendLayout();
             // 
             // btnAdd
@@ -162,8 +166,8 @@
             this.chart.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.Name = "ChartArea1";
-            this.chart.ChartAreas.Add(chartArea2);
+            chartArea4.Name = "ChartArea1";
+            this.chart.ChartAreas.Add(chartArea4);
             this.chart.Location = new System.Drawing.Point(12, 10);
             this.chart.Name = "chart";
             this.chart.Size = new System.Drawing.Size(927, 413);
@@ -246,7 +250,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnClear.Location = new System.Drawing.Point(1140, 371);
+            this.btnClear.Location = new System.Drawing.Point(1140, 400);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 17;
@@ -275,7 +279,7 @@
             // btnDelta
             // 
             this.btnDelta.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnDelta.Location = new System.Drawing.Point(965, 371);
+            this.btnDelta.Location = new System.Drawing.Point(965, 400);
             this.btnDelta.Name = "btnDelta";
             this.btnDelta.Size = new System.Drawing.Size(75, 23);
             this.btnDelta.TabIndex = 19;
@@ -294,11 +298,54 @@
             this.btnSaveExel.UseVisualStyleBackColor = true;
             this.btnSaveExel.Click += new System.EventHandler(this.btnSaveExel_Click);
             // 
+            // btnUpdateAprox
+            // 
+            this.btnUpdateAprox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnUpdateAprox.Location = new System.Drawing.Point(1081, 350);
+            this.btnUpdateAprox.Name = "btnUpdateAprox";
+            this.btnUpdateAprox.Size = new System.Drawing.Size(75, 23);
+            this.btnUpdateAprox.TabIndex = 21;
+            this.btnUpdateAprox.Text = "btnUpdateAprox";
+            this.btnUpdateAprox.UseVisualStyleBackColor = true;
+            this.btnUpdateAprox.Click += new System.EventHandler(this.btnUpdateAprox_Click);
+            // 
+            // btnCreateAprox
+            // 
+            this.btnCreateAprox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnCreateAprox.Location = new System.Drawing.Point(1000, 350);
+            this.btnCreateAprox.Name = "btnCreateAprox";
+            this.btnCreateAprox.Size = new System.Drawing.Size(75, 23);
+            this.btnCreateAprox.TabIndex = 22;
+            this.btnCreateAprox.Text = "btnCreateAprox";
+            this.btnCreateAprox.UseVisualStyleBackColor = true;
+            this.btnCreateAprox.Click += new System.EventHandler(this.btnCreateAprox_Click);
+            // 
+            // numAproxPow
+            // 
+            this.numAproxPow.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.numAproxPow.Location = new System.Drawing.Point(1162, 353);
+            this.numAproxPow.Maximum = new decimal(new int[] {
+            12,
+            0,
+            0,
+            0});
+            this.numAproxPow.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            -2147483648});
+            this.numAproxPow.Name = "numAproxPow";
+            this.numAproxPow.Size = new System.Drawing.Size(53, 20);
+            this.numAproxPow.TabIndex = 23;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1389, 497);
+            this.Controls.Add(this.numAproxPow);
+            this.Controls.Add(this.btnCreateAprox);
+            this.Controls.Add(this.btnUpdateAprox);
             this.Controls.Add(this.btnSaveExel);
             this.Controls.Add(this.btnDelta);
             this.Controls.Add(this.numSub);
@@ -325,6 +372,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numStartFileMs)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numSub)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numAproxPow)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -353,6 +401,9 @@
         private System.Windows.Forms.NumericUpDown numSub;
         private System.Windows.Forms.Button btnDelta;
         private System.Windows.Forms.Button btnSaveExel;
+        private System.Windows.Forms.Button btnUpdateAprox;
+        private System.Windows.Forms.Button btnCreateAprox;
+        private System.Windows.Forms.NumericUpDown numAproxPow;
     }
 }
 
